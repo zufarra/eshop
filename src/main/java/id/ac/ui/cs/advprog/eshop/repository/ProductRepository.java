@@ -18,6 +18,16 @@ public class ProductRepository {
         return product;
     }
 
+    public Product edit(Product product, String productId){
+        Product editedProduct = findProductById(productId);
+        if (editedProduct != null) {
+            editedProduct.setProductName(product.getProductName());
+            editedProduct.setProductQuantity(product.getProductQuantity());
+            return editedProduct;
+        }
+        return null;
+    }
+
     public void delete(String productId) {
         Product deletedProduct = findProductById(productId);
         if (deletedProduct != null) {
