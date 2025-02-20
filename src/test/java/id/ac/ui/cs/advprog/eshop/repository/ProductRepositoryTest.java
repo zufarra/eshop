@@ -117,6 +117,21 @@ class ProductRepositoryTest {
         assertFalse(productIterator.hasNext());
     }
 
+    @Test
+    void testFindByIdOfTwoProducts() {
+        Product product1 = new Product();
+        product1.setProductName("Sampo Cap Bambang");
+        product1.setProductQuantity(100);
+        productRepository.create(product1);
+        Product product2 = new Product();
+        product2.setProductName("Sampo Cap Ucup");
+        product2.setProductQuantity(200);
+        productRepository.create(product2);
+
+        Product result = productRepository.findProductById(product2.getProductId());
+        assertEquals(product2.getProductId(), result.getProductId());
+    }
+
 
 
 }
