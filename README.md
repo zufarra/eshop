@@ -1,7 +1,8 @@
 E-Shop (Advanced Programming A)
 ###### Zufar Romli Amri - A - 2306202694
+#Tutorial Modul 1
 <details>
-<summary><b>Reflection 1📝</b></summary>
+<summary><b>Reflection 1</b></summary>
 
 You already implemented two new features using Spring Boot. Check again your source code and evaluate the coding standards that you have learned in this module. Write clean code principles and secure coding practices that have been applied to your code.  If you find any mistake in your source code, please explain how to improve your code.
 
@@ -23,7 +24,7 @@ Jawab:
 </details>
 
 <details>
-<summary><b>Reflection 2📝</b></summary>
+<summary><b>Reflection 2</b></summary>
 
 1a. After writing the unit test, how do you feel?  
 
@@ -89,4 +90,50 @@ Alih-alih menuliskan selector By.id(...) langsung dalam setiap metode uji, kita 
 d. Membuat Superclass untuk mengelola setup
 
 Jika semua functional test membutuhkan setup yang sama, lebih baik kita buat superclass saja.
+</details>
+
+#Tutorial Modul 2
+<details>
+<summary><b>Reflection</b></summary>
+1. List the code quality issue(s) that you fixed during the exercise and explain your strategy on fixing them.
+  
+Jawab: 
+
+  Berikut beberapa kode yang bermasalah secara kualitas dan perbaikannya:
+  
+  a. public void delete(String productId); ==> void delete(String productId);
+  
+  b. public Product edit(Product product, String productId); ==> Product edit(Product product, String productId);
+  
+  c. public Product create(Product product); ==> Product create(Product product);
+  
+  d. public Product findProductById(String productId); ==> Product findProductById(String productId);
+  
+  e. public List<Product> findAll(); ==> List<Product> findAll();
+  
+Jadi, yang saya lakukan agar kualitas kode di atas membaik adalah dengan mengganti modifier dari public menjadi default dalam interface ProductService. Hal tersebut dilakukan karena berkaitan dengan beberapa hal:
+    
+- Membatasi Aksesibilitas (Encapsulation)
+    
+Dengan menjadikan metode dalam ProductService default (tanpa modifier public), kita dapat membatasi akses hanya ke kelas-kelas dalam package yang sama (id.ac.ui.cs.advprog.eshop.service). Hal ini bertujuan agar mencegah kelas-kelas lain di luar package langsung mengakses atau mengimplementasikan interface ini sehingga mengurangi risiko dependensi yang tidak diinginkan.
+
+- Mengurangi Kontrak yang Tidak Perlu (API Design)
+   
+Jika interface ini hanya digunakan dalam package service, tidak perlu mengeksposnya sebagai public. Alasannya, hal tersebut dapat menyebabkan penggunaan yang tidak diinginkan oleh bagian lain dari kode. Dengan menjadikannya package-private, kita dapat memastikan bahwa ProductService hanya dapat digunakan oleh kelas-kelas dalam package service, termasuk ProductServiceImpl.
+
+- Meminimalkan Risiko Implementasi yang Tidak Dikontrol
+  
+Jika ProductService bersifat public, siapa pun dapat membuat implementasi ProductService sendiri di luar kendali. Dengan menjadikannya package-private, kita dapat membatasi kemungkinan implementasi liar yang tidak sesuai dengan arsitektur aplikasi yang dirancang.
+
+- Meningkatkan Keamanan dan Maintainability
+   
+Dengan membatasi akses, kita dapat mengurangi kemungkinan modifikasi yang tidak disengaja atau tidak terkontrol oleh bagian lain dari aplikasi. Ketika kita perlu mengubah ProductService, kita hanya perlu mempertimbangkan dampaknya pada kelas-kelas dalam package yang sama, bukan seluruh aplikasi.
+
+2. Look at your CI/CD workflows (GitHub)/pipelines (GitLab). Do you think the current implementation has met the definition of Continuous Integration and Continuous Deployment? Explain the reasons (minimum 3 sentences)!
+   
+Jawab:
+
+Berdasarkan CI/CD workflows yang telah dikonfigurasi dalam ci.yml, pmd.yml, dan scorecard.yml, implementasi yang ada telah memenuhi definisi Continuous Integration (CI). ci.yml memastikan bahwa setiap push atau pull request menjalankan unit test dengan Gradle, yang sesuai dengan prinsip CI dalam mendeteksi kesalahan lebih awal. pmd.yml memperkuat kualitas kode dengan analisis static code menggunakan PMD, membantu dalam menjaga standar kode yang baik sebelum diintegrasikan ke main branch. Selain itu, scorecard.yml menambahkan analisis keamanan rantai pasokan kode untuk memastikan keandalan proyek. Selain itu, saya sudah melakukan konfigurasi deployment menggunakan Koyeb di GitHub Actions sehingga setiap perubahan yang telah lolos pengujian dan analisis kode akan otomatis dideploy ke lingkungan produksi, memenuhi prinsip CD dengan mempercepat siklus pengiriman perangkat lunak tanpa intervensi manual. Hal ini memastikan bahwa setiap pembaruan dapat segera tersedia bagi pengguna dengan proses yang efisien dan aman.
+
+
 </details>
