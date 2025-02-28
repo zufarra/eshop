@@ -48,12 +48,12 @@ class ProductServiceTest {
         product.setProductName("UpdatedProduct");
         product.setProductQuantity(20);
 
-        when(productRepository.edit(any(Product.class), anyString())).thenReturn(product);
-        Product updatedProduct = productService.edit(product, "1");
+        when(productRepository.update(anyString(), any(Product.class))).thenReturn(product);
+        Product updatedProduct = productService.update("1", product);
 
         assertNotNull(updatedProduct);
         assertEquals("UpdatedProduct", updatedProduct.getProductName());
-        verify(productRepository, times(1)).edit(product, "1");
+        verify(productRepository, times(1)).update("1", product);
     }
 
     @Test
@@ -88,8 +88,8 @@ class ProductServiceTest {
         product.setProductName("Product1");
         product.setProductQuantity(10);
 
-        when(productRepository.findProductById("1")).thenReturn(product);
-        Product foundProduct = productService.findProductById("1");
+        when(productRepository.findById("1")).thenReturn(product);
+        Product foundProduct = productService.findById("1");
 
         assertNotNull(foundProduct);
         assertEquals("Product1", foundProduct.getProductName());

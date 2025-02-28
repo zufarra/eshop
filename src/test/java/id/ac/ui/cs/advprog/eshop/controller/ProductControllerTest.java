@@ -45,7 +45,7 @@ class ProductControllerTest {
     void testCreateProductPost() throws Exception {
         mockMvc.perform(post("/product/create"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("list"));
+                .andExpect(redirectedUrl("/product/list"));
         verify(productService, times(1)).create(any(Product.class));
     }
 
@@ -71,7 +71,7 @@ class ProductControllerTest {
     @Test
     void testEditProductPage() throws Exception {
         Product product = new Product();
-        when(productService.findProductById("1")).thenReturn(product);
+        when(productService.findById("1")).thenReturn(product);
 
         mockMvc.perform(get("/product/edit/1"))
                 .andExpect(status().isOk())
@@ -84,6 +84,6 @@ class ProductControllerTest {
         mockMvc.perform(post("/product/edit/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/product/list"));
-        verify(productService, times(1)).edit(any(Product.class), eq("1"));
+        verify(productService, times(1)).update(eq("1"), any(Product.class));
     }
 }
