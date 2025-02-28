@@ -35,7 +35,7 @@ class ProductControllerTest {
 
     @Test
     void testCreateProductPage() throws Exception {
-        mockMvc.perform(get("/product/createProduct")) // Perbaikan mapping
+        mockMvc.perform(get("/product/createProduct"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("CreateProduct"))
                 .andExpect(model().attributeExists("product"));
@@ -43,7 +43,7 @@ class ProductControllerTest {
 
     @Test
     void testCreateProductPost() throws Exception {
-        mockMvc.perform(post("/product/createProduct")) // Perbaikan mapping
+        mockMvc.perform(post("/product/createProduct"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/product/listProduct"));
         verify(productService, times(1)).create(any(Product.class));
