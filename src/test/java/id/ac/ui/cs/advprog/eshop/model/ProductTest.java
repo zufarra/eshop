@@ -4,22 +4,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-class ProductTest extends BaseModelTest<Product> {
+class ProductTest {
 
     Product product;
 
-    @Override
-    protected Product createEntity() {
-        Product product = new Product();
-        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
-        product.setProductName("Sampo Cap Bambang");
-        product.setProductQuantity(100);
-        return product;
+    @BeforeEach
+    void setup() {
+        this.product = new Product();
+        this.product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        this.product.setProductName("Sampo Cap Bambang");
+        this.product.setProductQuantity(100);
     }
 
-    @Override
-    protected String getSampleId() {
-        return "eb558e9f-1c39-460e-8860-71af6af63bd6";
+    @Test
+    void testGetProductId() {
+        assertEquals("eb558e9f-1c39-460e-8860-71af6af63bd6", this.product.getProductId());
     }
 
     @Test
