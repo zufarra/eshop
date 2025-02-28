@@ -1,13 +1,13 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
+import id.ac.ui.cs.advprog.eshop.model.Identifiable;
 import id.ac.ui.cs.advprog.eshop.repository.BaseRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-import java.util.List;
 
-public abstract class BaseService<T> implements GenericService<T> {
+public abstract class BaseService<T extends Identifiable> implements GenericService<T> {
     protected BaseRepository<T> repository;
 
     public BaseService(BaseRepository<T> repository) {
