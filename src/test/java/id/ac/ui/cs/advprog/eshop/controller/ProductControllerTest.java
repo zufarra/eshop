@@ -35,7 +35,7 @@ class ProductControllerTest {
 
     @Test
     void testCreateProductPage() throws Exception {
-        mockMvc.perform(get("/product/create"))
+        mockMvc.perform(get("/product/createProduct")) // Perbaikan mapping
                 .andExpect(status().isOk())
                 .andExpect(view().name("CreateProduct"))
                 .andExpect(model().attributeExists("product"));
@@ -43,9 +43,9 @@ class ProductControllerTest {
 
     @Test
     void testCreateProductPost() throws Exception {
-        mockMvc.perform(post("/product/create"))
+        mockMvc.perform(post("/product/createProduct")) // Perbaikan mapping
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl("/product/listProduct"));
         verify(productService, times(1)).create(any(Product.class));
     }
 
@@ -54,7 +54,7 @@ class ProductControllerTest {
         List<Product> products = Arrays.asList(new Product(), new Product());
         when(productService.findAll()).thenReturn(products);
 
-        mockMvc.perform(get("/product/list"))
+        mockMvc.perform(get("/product/listProduct")) // Perbaikan mapping
                 .andExpect(status().isOk())
                 .andExpect(view().name("ProductList"))
                 .andExpect(model().attributeExists("products"));
@@ -62,9 +62,9 @@ class ProductControllerTest {
 
     @Test
     void testDeleteProductPost() throws Exception {
-        mockMvc.perform(post("/product/delete/1"))
+        mockMvc.perform(post("/product/deleteProduct/1")) // Perbaikan mapping
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl("/product/listProduct"));
         verify(productService, times(1)).delete("1");
     }
 
@@ -73,7 +73,7 @@ class ProductControllerTest {
         Product product = new Product();
         when(productService.findById("1")).thenReturn(product);
 
-        mockMvc.perform(get("/product/edit/1"))
+        mockMvc.perform(get("/product/editProduct/1")) // Perbaikan mapping
                 .andExpect(status().isOk())
                 .andExpect(view().name("EditProduct"))
                 .andExpect(model().attributeExists("product"));
@@ -81,9 +81,9 @@ class ProductControllerTest {
 
     @Test
     void testEditProductPost() throws Exception {
-        mockMvc.perform(post("/product/edit/1"))
+        mockMvc.perform(post("/product/editProduct/1")) // Perbaikan mapping
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl("/product/listProduct"));
         verify(productService, times(1)).update(eq("1"), any(Product.class));
     }
 }
