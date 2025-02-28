@@ -137,3 +137,106 @@ Berdasarkan CI/CD workflows yang telah dikonfigurasi dalam ci.yml, pmd.yml, dan 
 
 
 </details>
+
+#Tutorial Modul 3
+<details>
+<summary><b>Reflection</b></summary>
+  
+1. Explain what principles you apply to your project!
+  
+Jawab: 
+
+a. Single Responsibility Principle (SRP):
+
+Setiap kelas dalam proyek memiliki satu tanggung jawab yang spesifik.
+
+Contoh penerapan pada project:
+
+- Kelas model seperti Car dan Product hanya bertanggung jawab menyimpan data.
+  
+- Kelas repository menangani operasi CRUD (Create, Read, Update, Delete) untuk masing-masing entitas.
+  
+- Kelas service mengelola logika bisnis, sedangkan kelas controller menangani request HTTP dan berinteraksi dengan service.
+  
+b. Open-Closed Principle (OCP):
+
+Kode dirancang agar terbuka untuk ekstensi tetapi tertutup untuk modifikasi.
+
+Contoh penerapan pada project:
+
+- Pada layer repository dan service, saya telah membuat struktur yang generik sehingga jika di masa depan perlu menambahkan entitas baru (misalnya Motorcycle), kita tidak perlu mengubah logika CRUD yang sudah ada; cukup membuat repository dan service baru yang mengimplementasikan abstraksi yang telah ditetapkan.
+  
+c. Liskov Substitution Principle (LSP):
+
+Setiap subkelas harus dapat digunakan menggantikan kelas induknya tanpa mengubah kebenaran program.
+
+Contoh penerapan pada project:
+
+- Interface CarService dan ProductService diimplementasikan sedemikian rupa sehingga controller hanya bergantung pada abstraksi service, sehingga jika nanti implementasinya diganti (misalnya, dari CarServiceImpl ke implementasi lain), fungsionalitas di controller tetap berjalan dengan benar.
+  
+d. Interface Segregation Principle (ISP):
+
+Interface sebaiknya dibuat kecil dan spesifik, sehingga kelas tidak dipaksa mengimplementasikan metode yang tidak diperlukan.
+
+Contoh:
+
+- Service dan repository didesain dengan interface yang memisahkan tanggung jawab. Dengan demikian, setiap kelas hanya mengimplementasikan fungsi-fungsi yang sesuai dengan tugasnya tanpa “terbebani” dengan metode-metode yang tidak relevan.
+
+e. Dependency Inversion Principle (DIP):
+
+Modul tingkat tinggi tidak bergantung pada modul tingkat rendah, melainkan pada abstraksi.
+
+Contoh:
+
+- Kelas controller bergantung pada interface service (misalnya, CarService dan ProductService) daripada bergantung langsung pada implementasi konkret. Hal ini membuat sistem menjadi lebih fleksibel karena jika nanti implementasi service diubah, controller tidak perlu diubah.
+
+2. Explain the advantages of applying SOLID principles to your project with examples.
+
+Berikut beberapa keuntungan dalam mengaplikasikan SOLID principles:
+
+a. Kemudahan Pemeliharaan:
+
+Dengan SRP, setiap kelas memiliki tanggung jawab yang jelas. Misalnya, jika terjadi masalah pada operasi CRUD, kita hanya perlu memeriksa kelas repository tanpa harus menyusuri logika bisnis yang terdapat di service atau controller.
+
+b. Reusabilitas dan Ekstensibilitas:
+
+Penerapan OCP memungkinkan penambahan entitas baru tanpa harus mengubah kode yang sudah ada. Contohnya, struktur repository yang generik memudahkan penambahan kelas baru seperti MotorcycleRepository tanpa menyalin ulang seluruh logika CRUD.
+
+c. Pengujian yang Lebih Mudah:
+
+Karena tiap komponen dipisahkan (misalnya, model, repository, service, controller), unit test dapat ditulis secara terpisah untuk setiap bagian. Hal ini meningkatkan kecepatan deteksi bug dan membuat refactoring lebih aman.
+
+d. Fleksibilitas dalam Mengganti Implementasi:
+
+Dengan menerapkan DIP, kita dapat mengganti implementasi konkret dari repository atau service tanpa harus mengubah kode di controller. Ini sangat berguna ketika ingin berpindah dari penyimpanan in-memory ke database relasional, misalnya.
+
+e. Mengurangi Duplikasi Kode:
+
+Dengan menggunakan abstraksi melalui interface dan kelas generik, kita menghindari penulisan kode yang sama berulang-ulang. Misalnya, jika operasi CRUD sudah di-definisikan secara generik, penambahan entitas baru cukup mengimplementasikan antarmuka tersebut tanpa menulis ulang logika dasar.
+
+3. Explain the disadvantages of not applying SOLID principles to your project with examples.
+
+Berikut beberapa kerugian akibat tidak adanya pengaplikasian SOLID principles ke dalam proyek:
+
+a. Kode Menjadi Sulit Dipelihara:
+
+Tanpa SRP, sebuah kelas bisa menangani banyak hal sekaligus. Misalnya, jika logika penyimpanan data, logika bisnis, dan tampilan diimplementasikan dalam satu kelas, perbaikan bug atau penambahan fitur akan menjadi sangat sulit karena perubahan di satu bagian dapat berdampak pada bagian lain.
+
+b. Duplikasi Kode yang Tinggi:
+
+Tanpa OCP, setiap entitas baru mungkin memerlukan penulisan ulang operasi CRUD yang mirip, sehingga meningkatkan risiko inkonsistensi dan bug.
+
+c. Ketergantungan yang Kuat (Tight Coupling):
+
+Jika DIP tidak diterapkan, kelas controller akan bergantung langsung pada implementasi konkrit service. Hal ini membuat sistem kurang fleksibel karena setiap perubahan pada implementasi service memaksa perubahan di banyak tempat.
+
+d. Kesulitan dalam Pengujian:
+
+Tanpa pemisahan tugas (SRP) dan penggunaan abstraksi (DIP, ISP), unit test akan sulit dilakukan karena satu kelas mengandung logika yang kompleks dan banyak tanggung jawab, sehingga sulit untuk menentukan sumber masalah.
+
+e. Pengembangan yang Tidak Fleksibel:
+
+Sistem yang tidak mengikuti SOLID cenderung kaku, di mana setiap penambahan fitur baru memerlukan perubahan besar pada kode yang sudah ada, yang meningkatkan risiko terjadinya bug dan menurunkan produktivitas tim.
+
+</details>
+
