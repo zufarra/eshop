@@ -63,8 +63,7 @@ public class OrderServiceImplTest {
     @Test
     void testUpdateStatus(){
         Order order = orders.get(1);
-        Order newOrder = new Order (order.getId(), order.getProducts(), order.getOrderTime(),
-                order.getAuthor(), OrderStatus.SUCCESS.getValue());
+        Order newOrder = new Order (order.getId(), order.getProducts(), order.getOrderTime(), order.getAuthor(), OrderStatus.SUCCESS.getValue());
         doReturn(order).when(orderRepository).findById(order.getId());
         doReturn(newOrder).when(orderRepository).save(any(Order.class));
 
@@ -72,7 +71,7 @@ public class OrderServiceImplTest {
 
         assertEquals(order.getId(), result.getId());
         assertEquals(OrderStatus.SUCCESS.getValue(), result.getStatus());
-        verify(orderRepository, times(1)).save(any(Order.class)));
+        verify(orderRepository, times(1)).save(any(Order.class));
     }
     @Test
     void testUpdateStatusInvalidStatus(){
@@ -84,7 +83,7 @@ public class OrderServiceImplTest {
     }
     @Test
     void testUpdateStatusInvalidOrderId(){
-        doReturn(null).when(OrderRepository).findById("zczc");
+        doReturn(null).when(orderRepository).findById("zczc");
 
         assertThrows(NoSuchElementException.class,
                 () -> orderService.updateStatus("zczc", OrderStatus.SUCCESS.getValue()));
@@ -117,7 +116,8 @@ public class OrderServiceImplTest {
     @Test
     void testFindAllByAuthorIfAllLowercase(){
         Order order = orders.get(1);
-        doReturn(new ArrayList<Order>()).when(orderRepository).findAllByAuthor(order.getAuthor(order.getAuthor().toLowerCase()));
+        doReturn(new ArrayList<Order>()).when(orderRepository)
+                .findAllByAuthor(order.getAuthor().toLowerCase());
 
         List<Order> results = orderService.findAllByAuthor(order.getAuthor().toLowerCase());
         assertTrue(results.isEmpty());
