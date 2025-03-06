@@ -21,54 +21,58 @@ public class Payment {
         this.status = status;
         this.paymentData = paymentData;
 
-        // Validasi status
+        validateStatus();
+        validateMethod();
+        validatePaymentData();
+    }
+
+    private void validateStatus() {
         if (status != null && !status.equals("SUCCESS") && !status.equals("FAILED") && !status.equals("REJECTED")) {
             throw new IllegalArgumentException("Invalid payment status");
         }
+    }
 
-        // Validasi metode pembayaran
-        if (!method.equals("VOUCHER") && !method.equals("BANK_TRANSFER")) {
+    private void validateMethod() {
+        if (!"VOUCHER".equals(method) && !"BANK_TRANSFER".equals(method)) {
             throw new IllegalArgumentException("Invalid payment method");
         }
+    }
 
-        // Validasi data spesifik sesuai metode pembayaran
-        if (method.equals("VOUCHER")) {
-            if (!paymentData.containsKey("voucherCode")) {
-                this.status = "REJECTED";
-                return;
-            }
-
-            String voucherCode = paymentData.get("voucherCode");
-
-            // Voucher harus 16 karakter, diawali "ESHOP", dan minimal ada 8 digit angka
-            if (voucherCode.length() != 16 || !voucherCode.startsWith("ESHOP")) {
-                this.status = "REJECTED";
-                return;
-            }
-
-            int digitCount = 0;
-            for (char c : voucherCode.toCharArray()) {
-                if (Character.isDigit(c)) {
-                    digitCount++;
-                }
-            }
-            if (digitCount < 8) {
-                this.status = "REJECTED";
-            }
+    private void validatePaymentData() {
+        if (paymentData == null || paymentData.isEmpty()) {
+            return;
         }
 
-        if (method.equals("BANK_TRANSFER")) {
-            if (!paymentData.containsKey("bankName") || !paymentData.containsKey("referenceCode")) {
-                this.status = "REJECTED";
-                return;
-            }
-
-            String bankName = paymentData.get("bankName");
-            String referenceCode = paymentData.get("referenceCode");
-
-            if (bankName == null || bankName.isEmpty() || referenceCode == null || referenceCode.isEmpty()) {
-                this.status = "REJECTED";
-            }
+        switch (method) {
+            case "VOUCHER":
+                validateVoucher();
+                break;
+            case "BANK_TRANSFER":
+                validateBankTransfer();
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported payment method");
         }
+    }
+
+    private void validateVoucher() {
+        String voucherCode = paymentData.get("voucherCode");
+
+        if (voucherCode == null || voucherCode.length() != 16 || !voucherCode.startsWith("ESHOP") || countDigits(voucherCode) < 8) {
+            this.status = "REJECTED";
+        }
+    }
+
+    private void validateBankTransfer() {
+        String bankName = paymentData.get("bankName");
+        String referenceCode = paymentData.get("referenceCode");
+
+        if (bankName == null || bankName.isEmpty() || referenceCode == null || referenceCode.isEmpty()) {
+            this.status = "REJECTED";
+        }
+    }
+
+    private int countDigits(String str) {
+        return (int) str.chars().filter(Character::isDigit).count();
     }
 }
