@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import enums.PaymentStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +28,7 @@ public class Payment {
     }
 
     private void validateStatus() {
-        if (status != null && !status.equals("SUCCESS") && !status.equals("FAILED") && !status.equals("REJECTED")) {
+        if (status != null && !status.equals(PaymentStatus.SUCCESS.getValue()) && !status.equals(PaymentStatus.FAILED.getValue()) && !status.equals(PaymentStatus.REJECTED.getValue())) {
             throw new IllegalArgumentException("Invalid payment status");
         }
     }
@@ -59,7 +60,7 @@ public class Payment {
         String voucherCode = paymentData.get("voucherCode");
 
         if (voucherCode == null || voucherCode.length() != 16 || !voucherCode.startsWith("ESHOP") || countDigits(voucherCode) < 8) {
-            this.status = "REJECTED";
+            this.status = PaymentStatus.REJECTED.getValue();
         }
     }
 
@@ -68,7 +69,7 @@ public class Payment {
         String referenceCode = paymentData.get("referenceCode");
 
         if (bankName == null || bankName.isEmpty() || referenceCode == null || referenceCode.isEmpty()) {
-            this.status = "REJECTED";
+            this.status = PaymentStatus.REJECTED.getValue();
         }
     }
 
