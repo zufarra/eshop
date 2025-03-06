@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import enums.PaymentMethod;
 import enums.PaymentStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,7 +35,7 @@ public class Payment {
     }
 
     private void validateMethod() {
-        if (!"VOUCHER".equals(method) && !"BANK_TRANSFER".equals(method)) {
+        if (!PaymentMethod.VOUCHER.getValue().equals(method) && !PaymentMethod.BANK_TRANSFER.getValue().equals(method)) {
             throw new IllegalArgumentException("Invalid payment method");
         }
     }
