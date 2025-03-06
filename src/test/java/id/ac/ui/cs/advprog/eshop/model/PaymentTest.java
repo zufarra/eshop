@@ -1,7 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
 import org.junit.jupiter.api.Test;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ public class PaymentTest {
     void testCreatePaymentWithoutStatus(){
         Map<String, String> paymentData = new HashMap<>();
         Payment payment = new Payment("123", "VOUCHER", null, paymentData);
-
         assertEquals("123", payment.getId());
         assertEquals("VOUCHER", payment.getMethod());
         assertNull(payment.getStatus());
@@ -24,7 +22,7 @@ public class PaymentTest {
         Map<String, String> paymentData = new HashMap<>();
         Payment payment = new Payment("456", "VOUCHER", "SUCCESS", paymentData);
 
-        assertEquals("SUCCESS", payment.getStatus());
+        assertEquals("SUCCESS", payment.getMethod());
     }
 
     @Test
@@ -40,8 +38,7 @@ public class PaymentTest {
     void testCreatePaymentWithVoucherMethod(){
         Map<String, String> paymentData = new HashMap<>();
         Payment payment = new Payment("101", "VOUCHER", "FAILED", paymentData);
-
-        assertEquals("voucherCode", payment.getMethod());
+        assertEquals("VOUCHER", payment.getMethod());
     }
 
     @Test
@@ -79,7 +76,7 @@ public class PaymentTest {
         paymentData.put("referenceCode", null);
 
         Payment payment = new Payment("123", "BANK_TRANSFER", "SUCCESS", paymentData);
-        payment.setStatus("REJECTED")
+        payment.setStatus("REJECTED");
         assertEquals("REJECTED", payment.getStatus());
     }
 
