@@ -5,46 +5,36 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class PaymentRepository {
     private List<Payment> allPayment = new ArrayList<>();
 
     public Payment save (Payment payment) {
-        int i = 0;
-        for (Payment savedPayment : allPayment) {
-            if (savedPayment.getId().equals(payment.getId())) {
-                allPayment.remove(i);
-                allPayment.add(i, payment);
+        for (int i = 0; i < allPayment.size(); i++) {
+            if (allPayment.get(i).getId().equals(payment.getId())) {
+                allPayment.set(i, payment);
                 return payment;
             }
-            i++;
         }
         allPayment.add(payment);
         return payment;
     }
 
     public Payment findById(String id) {
-        for(Payment savedPayment : allPayment) {
-            if (savedPayment.getId().equals(id)) {
-                return savedPayment;
-            }
-        }
-        return null;
+        return allPayment.stream()
+                .filter(payment -> payment.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
     public List<Payment> findAll() {
-        List<Payment> payments = new ArrayList<>();
-        payments.addAll(allPayment);
-        return payments;
+        return new ArrayList<>(allPayment);
     }
 
     public List<Payment> findAllByMethod(String method) {
-        List<Payment> payments = new ArrayList<>();
-        for (Payment savedPayment : allPayment) {
-            if (savedPayment.getMethod().equals(method)) {
-                payments.add(savedPayment);
-            }
-        }
-        return payments;
+        return allPayment.stream()
+                .filter(payment -> payment.getMethod().equals(method))
+                .collect(Collectors.toList());
     }
 }
