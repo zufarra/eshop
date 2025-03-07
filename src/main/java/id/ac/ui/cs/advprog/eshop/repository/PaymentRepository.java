@@ -28,13 +28,15 @@ public class PaymentRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    public List<Payment> findByOrderId(String orderId) {
+        return allPayment.stream()
+                .filter(payment -> payment.getOrder().getId().equals(orderId))
+                .collect(Collectors.toList());
+    }
     public List<Payment> findAll() {
         return new ArrayList<>(allPayment);
     }
 
-    public List<Payment> findAllByMethod(String method) {
-        return allPayment.stream()
-                .filter(payment -> payment.getMethod().equals(method))
-                .collect(Collectors.toList());
-    }
+
 }
