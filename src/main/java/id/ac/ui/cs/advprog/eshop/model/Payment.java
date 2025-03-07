@@ -24,6 +24,12 @@ public class Payment {
         if (order == null) {
             throw new IllegalArgumentException("Order cannot be null");
         }
+        if ("SUCCESS".equals(order.getStatus()) || "FAILED".equals(order.getStatus())) {
+            throw new IllegalStateException("Cannot create payment for a completed order");
+        }
+        if (paymentData == null || paymentData.isEmpty()) {
+            throw new IllegalArgumentException("Payment data cannot be empty");
+        }
 
         this.id = UUID.randomUUID().toString();
         this.method = method;
