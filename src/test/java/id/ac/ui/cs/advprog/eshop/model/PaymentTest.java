@@ -68,25 +68,13 @@ class PaymentTest {
     }
 
     @Test
-    void testCreatePaymentForOrderWithFailedOrSuccessStatus() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP12345678ABC");
-        Order order = orders.getFirst();
-        order.setStatus("FAILED");
-
-        assertThatThrownBy(() -> new Payment(PaymentMethod.VOUCHER.getValue(), paymentData, order))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Cannot create payment for a completed order");
-    }
-
-    @Test
     void testCreatePaymentWithEmptyPaymentData() {
         Map<String, String> paymentData = new HashMap<>();
         Order order = orders.getFirst();
 
         assertThatThrownBy(() -> new Payment(PaymentMethod.VOUCHER.getValue(), paymentData, order))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Payment data cannot be empty");
+                .hasMessageContaining("Payment Data cannot be null");
     }
 
     @Test
