@@ -240,3 +240,67 @@ Sistem yang tidak mengikuti SOLID cenderung kaku, di mana setiap penambahan fitu
 
 </details>
 
+#Tutorial Modul 4
+<details>
+<summary><b>Reflection</b></summary>
+Soal Nomor 1: Reflect based on Percival (2017) proposed self-reflective questions (in “Principles and Best Practice of Testing” submodule, chapter “Evaluating Your Testing Objectives”), whether this TDD flow is useful enough for you or not. If not, explain things that you need to do next time you make more tests.
+
+Jawab:
+
+1. Apakah pengujian memberikan kepercayaan yang cukup terhadap kebenaran kode?
+
+Pengujian yang dilakukan berhasil mengidentifikasi beberapa validasi yang kurang, seperti penanganan paymentData yang kosong dan status order yang tidak valid. Namun, beberapa kasus seperti ini tidak langsung ditemukan sejak awal, yang berarti cakupan pengujian masih bisa ditingkatkan.
+
+2. Apakah pengujian gagal karena alasan yang tepat sebelum implementasi?
+
+Sebagian besar pengujian mengikuti pendekatan TDD yang benar, di mana pengujian awalnya gagal sebelum implementasi perbaikannya. Namun, ada beberapa kasus yang mengasumsikan akan terjadi exception, tetapi ternyata validasi di kode belum ada. Ini menunjukkan perlunya pemeriksaan ulang terhadap asumsi sebelum menulis pengujian.
+
+3. Apakah pengujian meningkatkan desain kode dan kemudahan pemeliharaan?
+
+Pengujian yang dilakukan berhasil mengungkap potensi kekurangan dalam desain kode, seperti kurangnya validasi di konstruktor Payment. Dengan adanya pengujian ini, kode dapat diperbaiki agar lebih robust. Namun, struktur pengujian masih bisa diperbaiki dengan mengorganisir data uji lebih baik agar lebih mudah dipelihara.
+
+4. Apakah waktu yang dihabiskan untuk pengujian bermanfaat?
+
+Meskipun waktu yang dihabiskan untuk debugging dan memperbaiki kegagalan pengujian cukup banyak, hasil akhirnya memastikan bahwa aturan bisnis yang penting (seperti tidak boleh membuat pembayaran untuk order yang gagal) benar-benar diterapkan. Namun, ada tantangan dalam menyeimbangkan kecepatan pengembangan dengan cakupan pengujian yang menyeluruh.
+
+5. Apa yang Perlu Ditingkatkan untuk Pengujian Berikutnya?
+- Perluas cakupan pengujian, terutama untuk edge cases dan skenario kegagalan.
+
+- Tinjau ulang asumsi sebelum menulis pengujian, agar tidak mengandalkan ekspektasi yang salah.
+
+- Susun ulang struktur pengujian agar lebih terorganisir dan mudah dipelihara.
+
+Soal Nomor 2: You have created unit tests in Tutorial. Now reflect whether your tests have successfully followed F.I.R.S.T. principle or not. If not, explain things that you need to do the next time you create more tests.
+
+Jawab: 
+
+Refleksi terhadap Kepatuhan terhadap Prinsip F.I.R.S.T.
+Prinsip F.I.R.S.T. memastikan bahwa unit test yang dibuat efektif. Berikut adalah evaluasi pengujian terhadap prinsip ini:
+
+1. Fast (Cepat) 
+
+Pengujian berjalan cepat karena tidak bergantung pada sumber daya eksternal.
+
+2. Independent (Independen)
+
+Beberapa pengujian menggunakan instance orders yang sama, yang bisa menyebabkan perilaku tak terduga jika ada perubahan dalam objek tersebut. Solusinya, setiap pengujian sebaiknya menggunakan instance baru agar tidak saling bergantung.
+
+3. Repeatable (Dapat Diulang)
+
+Pengujian selalu menghasilkan hasil yang sama setiap kali dijalankan, karena tidak bergantung pada faktor eksternal.
+
+4. Self-validating (Memvalidasi Diri)
+
+Pengujian menggunakan assertion yang jelas, sehingga mudah mengetahui apakah pengujian berhasil atau gagal.
+
+5. Timely (Tepat Waktu) 
+
+Beberapa validasi, seperti order status yang tidak valid, tidak diuji sejak awal. Ini menunjukkan bahwa pengujian belum sepenuhnya dilakukan sebelum implementasi kode. Agar lebih sesuai dengan TDD, pengujian harus ditulis sebelum kode utama dibuat.
+
+Apa yang Perlu Ditingkatkan untuk Pengujian Berikutnya?
+- Pastikan pengujian benar-benar independen, hindari penggunaan instance bersama.
+- Tuliskan pengujian lebih awal agar lebih sesuai dengan metodologi TDD.
+
+
+</details>
+
