@@ -3,6 +3,7 @@ package id.ac.ui.cs.advprog.eshop.service;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.model.Product;
+import id.ac.ui.cs.advprog.eshop.repository.OrderRepository;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
 import enums.PaymentMethod;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import java.util.*;
 class PaymentServiceTest {
     private PaymentServiceImpl paymentService;
     private PaymentRepository paymentRepository;
+    private OrderRepository orderRepository;
 
     private Order order;
     private Map<String, String> paymentData;
@@ -24,7 +26,8 @@ class PaymentServiceTest {
     @BeforeEach
     void setUp() {
         paymentRepository = mock(PaymentRepository.class);
-        paymentService = new PaymentServiceImpl(paymentRepository);
+        orderRepository = mock(OrderRepository.class);
+        paymentService = new PaymentServiceImpl(paymentRepository, orderRepository);
         List<Product> products = new ArrayList<>();
         Product product1 = new Product();
         product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
