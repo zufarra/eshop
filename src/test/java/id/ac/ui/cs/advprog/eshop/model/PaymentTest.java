@@ -1,107 +1,69 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
 import enums.PaymentMethod;
-import enums.PaymentStatus;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+class PaymentTest {
+    private List<Product> products;
+    private List<Order> orders;
 
-public class PaymentTest {
+    @BeforeEach
+    void setUp() {
+        products = new ArrayList<>();
+        Product product1 = new Product();
+        product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product1.setProductName("Sampo Cap Bambang");
+        product1.setProductQuantity(2);
+        products.add(product1);
+
+        orders = new ArrayList<>();
+        Order order1 = new Order("13652556-012a-4c07-b546-54eb1396d79b", products, 1708560000L, "Safira Sudrajat");
+        orders.add(order1);
+        Order order2 = new Order("7f9e15bb-4b15-42f4-aebc-c3af385fb078", products, 1708560000L, "Safira Sudrajat");
+        orders.add(order2);
+    }
+
     @Test
-    void testCreatePaymentWithSuccessStatus(){
+    void testCreatePaymentWithValidParams() {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP12345678ABC");
-        Payment payment = new Payment("456", PaymentMethod.VOUCHER.getValue(), PaymentStatus.SUCCESS.getValue(), paymentData);
-        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
+
+        Order order = orders.getFirst();
+        Payment payment = new Payment(PaymentMethod.VOUCHER.getValue(), paymentData, order);
+
+        assertThat(payment).isNotNull();
+        assertThat(payment.getId()).isNotEmpty();
+        assertThat(payment.getMethod()).isEqualTo(PaymentMethod.VOUCHER.getValue());
+        assertThat(payment.getPaymentData()).containsEntry("voucherCode", "ESHOP12345678ABC");
+        assertThat(payment.getOrder()).isEqualTo(order);
     }
 
     @Test
-    void testCreatePaymentWithInvalidStatus(){
+    void testCreatePaymentWithInvalidMethod() {
         Map<String, String> paymentData = new HashMap<>();
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("789", PaymentMethod.VOUCHER.getValue(), "INVALID_STATUS", paymentData);
-        });
+        paymentData.put("voucherCode", "123456789");
+
+        Order order = orders.getFirst();
+
+        assertThatThrownBy(() -> new Payment("INVALID_METHOD", paymentData, order))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Invalid payment method");
     }
 
     @Test
-    void testCreatePaymentWithVoucherMethod(){
+    void testCreatePaymentWithNullOrder() {
         Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP12345678ABC");
-        Payment payment = new Payment("101", PaymentMethod.VOUCHER.getValue(), PaymentStatus.SUCCESS.getValue(), paymentData);
-        assertEquals(PaymentMethod.VOUCHER.getValue(), payment.getMethod());
-    }
+        paymentData.put("voucherCode", "123456789");
 
-    @Test
-    void testCreatePaymentWithBankTransferMethod(){
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("bankName", "Bank ABC");
-        paymentData.put("referenceCode", "REF1234");
-        Payment payment = new Payment("102", PaymentMethod.BANK_TRANSFER.getValue(), PaymentStatus.SUCCESS.getValue(), paymentData);
-
-        assertEquals(PaymentMethod.BANK_TRANSFER.getValue(), payment.getMethod());
-    }
-
-    @Test
-    void testCreatePaymentWithInvalidMethod(){
-        Map<String, String> paymentData = new HashMap<>();
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("103", "INVALID_METHOD", PaymentStatus.REJECTED.getValue(), paymentData);
-        });
-    }
-
-    @Test
-    void testCreatePaymentWithCorrectBankTransferValue(){
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("bankName", "Bank ABC");
-        paymentData.put("referenceCode", "REF1234");
-
-        Payment payment = new Payment("104", PaymentMethod.BANK_TRANSFER.getValue(), PaymentStatus.REJECTED.getValue(), paymentData);
-        assertEquals("Bank ABC", payment.getPaymentData().get("bankName"));
-        assertEquals("REF1234", payment.getPaymentData().get("referenceCode"));
-
-    }
-
-    @Test
-    void testCreatePaymentWithOneEmptyBankTransferValue(){
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("bankName", "Bank ABC");
-        paymentData.put("referenceCode", null);
-
-        Payment payment = new Payment("123", PaymentMethod.BANK_TRANSFER.getValue(), PaymentStatus.SUCCESS.getValue(), paymentData);
-        payment.setStatus(PaymentStatus.REJECTED.getValue());
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
-    }
-
-    @Test
-    void testCreatePaymentWithCorrectVoucherValue(){
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP1234ABC5678");
-
-        Payment payment = new Payment("106", PaymentMethod.VOUCHER.getValue(), PaymentStatus.SUCCESS.getValue(), paymentData);
-        assertEquals("ESHOP1234ABC5678", payment.getPaymentData().get("voucherCode"));
-    }
-
-    @Test
-    void testCreatePaymentWithInvalidCharacterLongForVoucherValue(){
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP1234AB5678");
-        Payment payment = new Payment("103", PaymentMethod.VOUCHER.getValue(), PaymentStatus.REJECTED.getValue(), paymentData);
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
-    }
-    @Test
-    void testCreatePaymentWithInvalidPrefixLongForVoucherValue(){
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "1234ABC567");
-        Payment payment = new Payment("103", PaymentMethod.VOUCHER.getValue(), PaymentStatus.REJECTED.getValue(), paymentData);
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
-    }
-    @Test
-    void testCreatePaymentWithInvalidNumericLongForVoucherValue(){
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP1234ABC567A");
-        Payment payment = new Payment("103", PaymentMethod.VOUCHER.getValue(), PaymentStatus.REJECTED.getValue(), paymentData);
-        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
+        assertThatThrownBy(() -> new Payment(PaymentMethod.VOUCHER.name(), paymentData, null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Order cannot be null");
     }
 }
