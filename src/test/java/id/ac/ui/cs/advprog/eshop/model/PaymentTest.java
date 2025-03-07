@@ -66,4 +66,39 @@ class PaymentTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Order cannot be null");
     }
+
+    @Test
+    void testCreatePaymentForOrderWithFailedOrSuccessStatus() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", "ESHOP12345678ABC");
+        Order order = orders.getFirst();
+        order.setStatus("FAILED");
+
+        assertThatThrownBy(() -> new Payment(PaymentMethod.VOUCHER.getValue(), paymentData, order))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Cannot create payment for a completed order");
+    }
+
+    @Test
+    void testCreatePaymentWithEmptyPaymentData() {
+        Map<String, String> paymentData = new HashMap<>();
+        Order order = orders.getFirst();
+
+        assertThatThrownBy(() -> new Payment(PaymentMethod.VOUCHER.getValue(), paymentData, order))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Payment data cannot be empty");
+    }
+
+    @Test
+    void testUniquePaymentIdGeneration() {
+        Map<String, String> paymentData1 = new HashMap<>();
+        paymentData1.put("voucherCode", "ESHOP12345678ABC");
+        Payment payment1 = new Payment(PaymentMethod.VOUCHER.getValue(), paymentData1, orders.get(0));
+
+        Map<String, String> paymentData2 = new HashMap<>();
+        paymentData2.put("voucherCode", "ESHOP98765432XYZ");
+        Payment payment2 = new Payment(PaymentMethod.BANK_TRANSFER.getValue(), paymentData2, orders.get(1));
+
+        assertThat(payment1.getId()).isNotEqualTo(payment2.getId());
+    }
 }
