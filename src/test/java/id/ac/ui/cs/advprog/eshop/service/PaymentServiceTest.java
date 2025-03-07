@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 
 class PaymentServiceTest {
-    private PaymentService paymentService;
+    private PaymentServiceImpl paymentService;
     private PaymentRepository paymentRepository;
 
     private Order order;
@@ -24,7 +24,7 @@ class PaymentServiceTest {
     @BeforeEach
     void setUp() {
         paymentRepository = mock(PaymentRepository.class);
-        paymentService = new PaymentService(paymentRepository);
+        paymentService = new PaymentServiceImpl(paymentRepository);
         List<Product> products = new ArrayList<>();
         Product product1 = new Product();
         product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
